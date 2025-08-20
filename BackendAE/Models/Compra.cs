@@ -20,11 +20,16 @@ namespace BackendAE.Models
         public string? Observacion { get; set; }
 
         // Clave foránea N:1 con Proveedor
-        [ForeignKey("Proveedor")]
         public int ProveedorId { get; set; }
+        [ForeignKey("ProveedorId")]
         public Proveedor? Proveedor { get; set; }
 
-        // Relación 1:N
-        public ICollection<DetalleCompra>? DetallesCompras { get; set; }
+        // Clave foránea N:1 con Usuario
+        public int UsuarioId { get; set; }
+        [ForeignKey("UsuarioId")]
+        public Usuario? Usuario { get; set; }
+
+        // Propiedad de navegación 1:N con DetalleCompra
+        public ICollection<DetalleCompra>? DetalleCompras { get; set; }
     }
 }

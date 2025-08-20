@@ -25,6 +25,8 @@ namespace BackendAE.Data
         public DbSet<Venta> Ventas { get; set; }
         public DbSet<DetalleVenta> DetallesVentas { get; set; }
 
+        public DbSet<DetalleCompra> DetalleCompras { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Configuraciones especiales de relaciones
@@ -66,7 +68,22 @@ namespace BackendAE.Data
             modelBuilder.Entity<Producto>().HasIndex(p => p.SKU).IsUnique();
             modelBuilder.Entity<Venta>().HasIndex(v => v.CodigoVenta).IsUnique();
 
-            base.OnModelCreating(modelBuilder);
+
+            // Evita el borrado en cascada para la relación Usuario-CajaSesion
+            modelBuilder.Entity<CajaSesion>()
+                .HasOne(cs => cs.Usuario)
+                .WithMany(u => u.CajaSesiones)
+                .HasForeignKey(cs => cs.UsuarioId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            // Evita el borrado en cascada para la relación Producto-Proveedor
+            modelBuilder.Entity<Producto>()
+                .HasOne(p => p.Proveedor)
+                .WithMany(pr => pr.Productos)
+                .HasForeignKey(p => p.ProveedorId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
+
+        
     }
 }

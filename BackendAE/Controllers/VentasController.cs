@@ -70,14 +70,65 @@ namespace BackendAE.Controllers
             return NoContent();
         }
 
+        //// POST: api/Ventas
+        //[HttpPost]
+        //[Authorize(Roles = "Admin, Empleado")] // Access para Admin y Empleado
+        //public async Task<ActionResult<Venta>> PostVenta(Venta venta)
+        //{
+        //    _context.Ventas.Add(venta);
+        //    await _context.SaveChangesAsync();
+        //    return CreatedAtAction("GetVenta", new { id = venta.VentaId }, venta);
+        //}
         // POST: api/Ventas
         [HttpPost]
-        [Authorize(Roles = "Admin, Empleado")] // Access para Admin y Empleado
+        [Authorize(Roles = "Admin, Empleado")]
         public async Task<ActionResult<Venta>> PostVenta(Venta venta)
         {
-            _context.Ventas.Add(venta);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction("GetVenta", new { id = venta.VentaId }, venta);
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                // 1. Generar CódigoVenta único
+                venta.CodigoVenta = "VTA-" + Guid.NewGuid().ToString().Substring(0, 8).ToUpper();
+
+                // 2. Calcular el total de la venta
+                decimal totalVenta = 0;
+                foreach (var detalleVenta in venta.DetallesVentas)
+                {
+                    var producto = await _context.Productos.FindAsync(detalleVenta.ProductoId);
+                    if (producto == null)
+                    {
+                        return BadRequest($"Producto con Id {detalleVenta.ProductoId} no encontrado.");
+                    }
+
+                    // Calcular el subtotal y sumarlo al total de la venta
+                    detalleVenta.PrecioUnitario = producto.PrecioVenta;
+                    detalleVenta.Subtotal = detalleVenta.Cantidad * detalleVenta.PrecioUnitario;
+                    totalVenta += detalleVenta.Subtotal;
+
+                    // 3. Actualizar el stock del producto
+                    if (producto.Stock < detalleVenta.Cantidad)
+                    {
+                        return BadRequest($"Stock insuficiente para el producto {producto.Nombre}. Stock disponible: {producto.Stock}");
+                    }
+                    producto.Stock -= detalleVenta.Cantidad;
+                }
+
+                venta.Total = totalVenta;
+                venta.Cambio = venta.EfectivoRecibido - venta.Total;
+                venta.FechaVenta = DateTime.Now;
+
+                _context.Ventas.Add(venta);
+                await _context.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+
+                return CreatedAtAction("GetVenta", new { id = venta.VentaId }, venta);
+            }
+            catch (Exception)
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
 
         // DELETE: api/Ventas/5

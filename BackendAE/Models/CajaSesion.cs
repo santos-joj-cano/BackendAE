@@ -9,6 +9,8 @@ namespace BackendAE.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CajaSesionId { get; set; }
 
+        public string CodigoSesion { get; set; } // Agrega esta propiedad
+
         [Required]
         public required DateTime FechaApertura { get; set; }
 
@@ -16,10 +18,16 @@ namespace BackendAE.Models
         [Column(TypeName = "decimal(12, 2)")]
         public required decimal MontoApertura { get; set; }
 
+        // Propiedad de clave foránea para la relación con Usuario
+        public int UsuarioId { get; set; }
+
         public DateTime? FechaCierre { get; set; }
 
+        public decimal MontoInicial { get; set; } // Agrega esta propiedad
+        public decimal TotalVentas { get; set; } // Agrega esta propiedad
+
         [Column(TypeName = "decimal(12, 2)")]
-        public decimal? MontoCierre { get; set; }
+        public decimal MontoCierre { get; set; }
 
         [Required]
         [StringLength(10)]
@@ -41,6 +49,10 @@ namespace BackendAE.Models
         [ForeignKey("UsuarioCierre")]
         public int? UsuarioCierreId { get; set; }
         public Usuario? UsuarioCierre { get; set; }
+
+        // Propiedad de navegación para la relación
+        [ForeignKey("UsuarioId")]
+        public Usuario Usuario { get; set; }
 
         // Relaciones 1:N
         public ICollection<MovimientoCaja>? MovimientosCaja { get; set; }

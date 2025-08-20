@@ -21,12 +21,10 @@ namespace BackendAE.Models
         public required decimal Subtotal { get; set; }
 
         // Clave foránea N:1 con Compra
-        [ForeignKey("Compra")]
         public int CompraId { get; set; }
         public Compra? Compra { get; set; }
 
         // Clave foránea N:1 con Producto
-        [ForeignKey("Producto")]
         public int ProductoId { get; set; }
         public Producto? Producto { get; set; }
     }

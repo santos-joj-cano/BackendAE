@@ -3,6 +3,7 @@ using BackendAE.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using BackendAE.DTOs;
 
 namespace BackendAE.Controllers
 {
@@ -17,15 +18,34 @@ namespace BackendAE.Controllers
             _context = context;
         }
 
+        // GET: api/CajaSesion
         [HttpGet]
-        [Authorize(Roles = "Admin, Empleado")] // Access para Admin y Empleado
-        public async Task<ActionResult<IEnumerable<CajaSesion>>> GetCajaSesiones()
+        [Authorize(Roles = "Admin, Empleado")]
+        public async Task<ActionResult<IEnumerable<CajaSesionDTO>>> GetCajaSesiones()
         {
-            return await _context.CajaSesiones
-                .Include(cs => cs.Caja)
-                .Include(cs => cs.UsuarioApertura)
-                .Include(cs => cs.UsuarioCierre)
+            var sesiones = await _context.CajaSesiones
+                .Include(cs => cs.Usuario)
                 .ToListAsync();
+
+            var sesionesDTO = sesiones.Select(cs => new CajaSesionDTO
+            {
+                CajaSesionId = cs.CajaSesionId,
+                CodigoSesion = cs.CodigoSesion,
+                FechaApertura = cs.FechaApertura,
+                FechaCierre = cs.FechaCierre,
+                MontoInicial = cs.MontoInicial,
+                TotalVentas = cs.TotalVentas,
+                MontoCierre = cs.MontoCierre,
+                Estado = cs.Estado,
+                Usuario = new UsuarioSimpleDTO
+                {
+                    UsuarioId = cs.Usuario.UsuarioId,
+                    NombreCompleto = $"{cs.Usuario.PrimerNombre} {cs.Usuario.PrimerApellido}",
+                    NombreUsuario = cs.Usuario.NombreUsuario
+                }
+            }).ToList();
+
+            return sesionesDTO;
         }
 
         [HttpGet("{id}")]
@@ -43,6 +63,9 @@ namespace BackendAE.Controllers
             }
             return cajaSesion;
         }
+
+        
+
 
         // PUT: api/CajaSesiones/5
         [HttpPut("{id}")]

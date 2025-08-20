@@ -28,7 +28,7 @@ namespace BackendAE.Controllers
         {
             var user = await _context.Usuarios
                 .Include(u => u.Rol)
-                .SingleOrDefaultAsync(u => u.Username == request.Username);
+                .SingleOrDefaultAsync(u => u.NombreUsuario == request.Username);
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
             {
@@ -43,8 +43,8 @@ namespace BackendAE.Controllers
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.UsuarioId.ToString()),
-                    new Claim(ClaimTypes.Name, user.Username),
-                    new Claim(ClaimTypes.Role, user.Rol?.RolNombre ?? "sin_rol")
+                    new Claim(ClaimTypes.Name, user.NombreUsuario),
+                    new Claim(ClaimTypes.Role, user.Rol?.RolNombre ?? "sin6_rol")
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(30),
                 Issuer = _configuration["Jwt:Issuer"],
