@@ -70,20 +70,18 @@ namespace BackendAE.Data
 
 
             // Evita el borrado en cascada para la relación Usuario-CajaSesion
-            modelBuilder.Entity<CajaSesion>()
-                .HasOne(cs => cs.Usuario)
-                .WithMany(u => u.CajaSesiones)
-                .HasForeignKey(cs => cs.UsuarioId)
-                .OnDelete(DeleteBehavior.NoAction);
+            //modelBuilder.Entity<CajaSesion>()
+            //    .HasOne(cs => cs.Usuario)
+            //    .WithMany(u => u.CajaSesiones)
+            //    .HasForeignKey(cs => cs.UsuarioId)
+            //    .OnDelete(DeleteBehavior.NoAction);
 
-            // Evita el borrado en cascada para la relación Producto-Proveedor
-            modelBuilder.Entity<Producto>()
-                .HasOne(p => p.Proveedor)
-                .WithMany(pr => pr.Productos)
-                .HasForeignKey(p => p.ProveedorId)
-                .OnDelete(DeleteBehavior.NoAction);
+            //// Evita el borrado en cascada para la relación Producto-Proveedor
+            //modelBuilder.Entity<Producto>()
+            //    .HasOne(p => p.Proveedor)
+            //    .WithMany(pr => pr.Productos)
+            //    .HasForeignKey(p => p.ProveedorId)
+            //    .OnDelete(DeleteBehavior.NoAction);
         }
-
-        
     }
 }

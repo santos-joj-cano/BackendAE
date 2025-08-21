@@ -3,14 +3,35 @@
     public class UsuarioDTO
     {
         public int UsuarioId { get; set; }
-        public required string PrimerNombre { get; set; }
-        public required string SegundoNombre { get; set; }
-        public required string PrimerApellido { get; set; }
-        public required string SegundoApellido { get; set; }
-        public required string NombreUsuario { get; set; }
-        public required string Email { get; set; }
-        public required string RolNombre { get; set; } // Propiedad para el nombre del rol
+
+        public string PrimerNombre { get; set; } = null!;
+
+        public string? SegundoNombre { get; set; }
+
+        public string PrimerApellido { get; set; } = null!;
+
+        public string? SegundoApellido { get; set; }
+
+        public string? NIT { get; set; }
+
+        public string? CUI { get; set; }
+
+        public DateTime? FechaNacimiento { get; set; }
+
+        public string? Telefono { get; set; }
+
+        public string? Direccion { get; set; }
+
+        public string? Genero { get; set; }
+
         public bool Estado { get; set; }
-        // Se pueden agregar más campos según sea necesario
+
+        public string Email { get; set; } = null!;
+
+        public string NombreUsuario { get; set; } = null!;
+
+        public int RolId { get; set; }
+
+        public string? RolNombre { get; set; } // Opcional, si deseas mostrar el nombre del rol
     }
 }

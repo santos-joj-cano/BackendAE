@@ -1,108 +1,78 @@
-﻿using BackendAE.Data;
+﻿using AutoMapper;
+using BackendAE.Data;
+using BackendAE.DTOs;
 using BackendAE.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace BackendAE.Controllers
 {
-    [Route("api/[controller]")]
-    
     [ApiController]
+    [Route("api/[controller]")]
     public class RolesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public RolesController(ApplicationDbContext context)
+        public RolesController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/Roles
         [HttpGet]
-        [Authorize(Roles = "Admin")] // Solo acceso para Admin
-        public async Task<ActionResult<IEnumerable<Rol>>> GetRoles()
+        public async Task<ActionResult<IEnumerable<RolDTO>>> GetRoles()
         {
-            return await _context.Roles.ToListAsync();
+            var roles = await _context.Roles.ToListAsync();
+            return Ok(_mapper.Map<List<RolDTO>>(roles));
         }
 
         // GET: api/Roles/5
-        [HttpGet("{id}")]
-        [Authorize(Roles = "Admin")] // Solo acceso para Admin
-        public async Task<ActionResult<Rol>> GetRol(int id)
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<RolDTO>> GetRol(int id)
         {
             var rol = await _context.Roles.FindAsync(id);
-
-            if (rol == null)
-            {
-                return NotFound();
-            }
-
-            return rol;
-        }
-
-        // PUT: api/Roles/5
-        [HttpPut("{id}")]
-        [Authorize(Roles = "Admin")] // Solo acceso para Admin
-        public async Task<IActionResult> PutRol(int id, Rol rol)
-        {
-            if (id != rol.RolId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(rol).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!RolExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            if (rol == null) return NotFound();
+            return Ok(_mapper.Map<RolDTO>(rol));
         }
 
         // POST: api/Roles
         [HttpPost]
-        [Authorize(Roles = "Admin")] // Solo acceso para Admin
-        public async Task<ActionResult<Rol>> PostRol(Rol rol)
+        public async Task<ActionResult> CrearRol([FromBody] RolDTO dto)
         {
+            var rol = _mapper.Map<Rol>(dto);
             _context.Roles.Add(rol);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetRol", new { id = rol.RolId }, rol);
+            var rolDTO = _mapper.Map<RolDTO>(rol);
+            return CreatedAtAction(nameof(GetRol), new { id = rol.RolId }, rolDTO);
+        }
+
+        // PUT: api/Roles/5
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult> ActualizarRol(int id, [FromBody] RolDTO dto)
+        {
+            var rol = await _context.Roles.FindAsync(id);
+            if (rol == null) return NotFound();
+
+            _mapper.Map(dto, rol);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
 
         // DELETE: api/Roles/5
-        [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")] // Solo acceso para Admin
-        public async Task<IActionResult> DeleteRol(int id)
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> EliminarRol(int id)
         {
             var rol = await _context.Roles.FindAsync(id);
-            if (rol == null)
-            {
-                return NotFound();
-            }
+            if (rol == null) return NotFound();
 
             _context.Roles.Remove(rol);
             await _context.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool RolExists(int id)
-        {
-            return _context.Roles.Any(e => e.RolId == id);
         }
     }
 }

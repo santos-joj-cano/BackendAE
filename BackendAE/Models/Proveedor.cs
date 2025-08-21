@@ -34,6 +34,5 @@ namespace BackendAE.Models
         // Relación 1:N
         public ICollection<Compra>? Compras { get; set; }
 
-        public ICollection<Producto>? Productos { get; set; }
     }
 }

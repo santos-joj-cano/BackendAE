@@ -1,128 +1,93 @@
-﻿using BackendAE.Data;
+﻿using AutoMapper;
+using BackendAE.Data;
+using BackendAE.DTOs;
 using BackendAE.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using BackendAE.DTOs;
 
 namespace BackendAE.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class CajaSesionesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public CajaSesionesController(ApplicationDbContext context)
+        public CajaSesionesController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        // GET: api/CajaSesion
+        // GET: api/CajaSesiones
         [HttpGet]
-        [Authorize(Roles = "Admin, Empleado")]
         public async Task<ActionResult<IEnumerable<CajaSesionDTO>>> GetCajaSesiones()
         {
             var sesiones = await _context.CajaSesiones
-                .Include(cs => cs.Usuario)
+                .Include(c => c.Caja)
+                .Include(c => c.UsuarioApertura)
+                .Include(c => c.UsuarioCierre)
                 .ToListAsync();
 
-            var sesionesDTO = sesiones.Select(cs => new CajaSesionDTO
-            {
-                CajaSesionId = cs.CajaSesionId,
-                CodigoSesion = cs.CodigoSesion,
-                FechaApertura = cs.FechaApertura,
-                FechaCierre = cs.FechaCierre,
-                MontoInicial = cs.MontoInicial,
-                TotalVentas = cs.TotalVentas,
-                MontoCierre = cs.MontoCierre,
-                Estado = cs.Estado,
-                Usuario = new UsuarioSimpleDTO
-                {
-                    UsuarioId = cs.Usuario.UsuarioId,
-                    NombreCompleto = $"{cs.Usuario.PrimerNombre} {cs.Usuario.PrimerApellido}",
-                    NombreUsuario = cs.Usuario.NombreUsuario
-                }
-            }).ToList();
-
-            return sesionesDTO;
+            return Ok(_mapper.Map<List<CajaSesionDTO>>(sesiones));
         }
 
-        [HttpGet("{id}")]
-        [Authorize(Roles = "Admin, Empleado")] // Access para Admin y Empleado
-        public async Task<ActionResult<CajaSesion>> GetCajaSesion(int id)
+        // GET: api/CajaSesiones/5
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<CajaSesionDTO>> GetCajaSesion(int id)
         {
-            var cajaSesion = await _context.CajaSesiones
-                .Include(cs => cs.Caja)
-                .Include(cs => cs.UsuarioApertura)
-                .Include(cs => cs.UsuarioCierre)
-                .FirstOrDefaultAsync(cs => cs.CajaSesionId == id);
-            if (cajaSesion == null)
-            {
-                return NotFound();
-            }
-            return cajaSesion;
-        }
+            var sesion = await _context.CajaSesiones
+                .Include(c => c.Caja)
+                .Include(c => c.UsuarioApertura)
+                .Include(c => c.UsuarioCierre)
+                .FirstOrDefaultAsync(c => c.CajaSesionId == id);
 
-        
+            if (sesion == null) return NotFound();
 
-
-        // PUT: api/CajaSesiones/5
-        [HttpPut("{id}")]
-        [Authorize(Roles = "Admin")] // Access para Admin y Empleado
-        public async Task<IActionResult> PutCajaSesion(int id, CajaSesion cajaSesion)
-        {
-            if (id != cajaSesion.CajaSesionId)
-            {
-                return BadRequest();
-            }
-            _context.Entry(cajaSesion).State = EntityState.Modified;
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CajaSesionExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            return NoContent();
+            return _mapper.Map<CajaSesionDTO>(sesion);
         }
 
         // POST: api/CajaSesiones
         [HttpPost]
-        [Authorize(Roles = "Admin, Empleado")] // Access para Admin y Empleado
-        public async Task<ActionResult<CajaSesion>> PostCajaSesion(CajaSesion cajaSesion)
+        public async Task<ActionResult> CrearCajaSesion([FromBody] CajaSesionCreacionDTO dto)
         {
-            _context.CajaSesiones.Add(cajaSesion);
+            var sesion = _mapper.Map<CajaSesion>(dto);
+
+            _context.CajaSesiones.Add(sesion);
             await _context.SaveChangesAsync();
-            return CreatedAtAction("GetCajaSesion", new { id = cajaSesion.CajaSesionId }, cajaSesion);
+
+            var dtoCreado = _mapper.Map<CajaSesionDTO>(sesion);
+
+            return CreatedAtAction(nameof(GetCajaSesion), new { id = sesion.CajaSesionId }, dtoCreado);
         }
 
-        // DELETE: api/CajaSesiones/5
-        [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")] // Solo acceso para Admin
-        public async Task<IActionResult> DeleteCajaSesion(int id)
+        // PUT: api/CajaSesiones/5
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult> ActualizarCajaSesion(int id, [FromBody] CajaSesionCreacionDTO dto)
         {
-            var cajaSesion = await _context.CajaSesiones.FindAsync(id);
-            if (cajaSesion == null)
-            {
-                return NotFound();
-            }
-            _context.CajaSesiones.Remove(cajaSesion);
+            var sesion = await _context.CajaSesiones.FindAsync(id);
+
+            if (sesion == null) return NotFound();
+
+            _mapper.Map(dto, sesion);
             await _context.SaveChangesAsync();
+
             return NoContent();
         }
 
-        private bool CajaSesionExists(int id)
+        // DELETE: api/CajaSesiones/5
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> EliminarCajaSesion(int id)
         {
-            return _context.CajaSesiones.Any(e => e.CajaSesionId == id);
+            var sesion = await _context.CajaSesiones.FindAsync(id);
+
+            if (sesion == null) return NotFound();
+
+            _context.CajaSesiones.Remove(sesion);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }

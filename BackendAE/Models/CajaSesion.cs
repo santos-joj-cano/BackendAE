@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
 namespace BackendAE.Models
 {
     public class CajaSesion
@@ -8,54 +7,34 @@ namespace BackendAE.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CajaSesionId { get; set; }
-
-        public string CodigoSesion { get; set; } // Agrega esta propiedad
-
         [Required]
         public required DateTime FechaApertura { get; set; }
-
         [Required]
         [Column(TypeName = "decimal(12, 2)")]
         public required decimal MontoApertura { get; set; }
-
-        // Propiedad de clave foránea para la relación con Usuario
-        public int UsuarioId { get; set; }
-
         public DateTime? FechaCierre { get; set; }
-
-        public decimal MontoInicial { get; set; } // Agrega esta propiedad
-        public decimal TotalVentas { get; set; } // Agrega esta propiedad
-
+        
         [Column(TypeName = "decimal(12, 2)")]
         public decimal MontoCierre { get; set; }
-
         [Required]
         [StringLength(10)]
         public required string Estado { get; set; }
-
         [StringLength(250)]
         public string? Observacion { get; set; }
-
         // Clave foránea N:1 con Caja
         [ForeignKey("Caja")]
         public int CajaId { get; set; }
         public Caja? Caja { get; set; }
-
         // Claves foráneas N:1 con Usuarios
         [ForeignKey("UsuarioApertura")]
         public int UsuarioAperturaId { get; set; }
         public Usuario? UsuarioApertura { get; set; }
-
         [ForeignKey("UsuarioCierre")]
         public int? UsuarioCierreId { get; set; }
         public Usuario? UsuarioCierre { get; set; }
-
-        // Propiedad de navegación para la relación
-        [ForeignKey("UsuarioId")]
-        public Usuario Usuario { get; set; }
-
-        // Relaciones 1:N
+        // Propiedad de navegación para la relación 1:N con MovimientoCaja
         public ICollection<MovimientoCaja>? MovimientosCaja { get; set; }
+        // Propiedad de navegación para la relación 1:N con Venta
         public ICollection<Venta>? Ventas { get; set; }
     }
 }

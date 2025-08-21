@@ -24,11 +24,6 @@ namespace BackendAE.Models
         [ForeignKey("ProveedorId")]
         public Proveedor? Proveedor { get; set; }
 
-        // Clave foránea N:1 con Usuario
-        public int UsuarioId { get; set; }
-        [ForeignKey("UsuarioId")]
-        public Usuario? Usuario { get; set; }
-
         // Propiedad de navegación 1:N con DetalleCompra
         public ICollection<DetalleCompra>? DetalleCompras { get; set; }
     }

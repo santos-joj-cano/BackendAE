@@ -1,17 +1,31 @@
-﻿using BackendAE.Models;
-
-namespace BackendAE.DTOs
+﻿namespace BackendAE.DTOs
 {
     public class CajaSesionDTO
     {
         public int CajaSesionId { get; set; }
-        public string CodigoSesion { get; set; }
+
         public DateTime FechaApertura { get; set; }
+
+        public decimal MontoApertura { get; set; }
+
         public DateTime? FechaCierre { get; set; }
-        public decimal MontoInicial { get; set; }
-        public decimal TotalVentas { get; set; }
+
         public decimal MontoCierre { get; set; }
-        public string Estado { get; set; }
-        public UsuarioSimpleDTO Usuario { get; set; }
+
+        public string Estado { get; set; } = null!;
+
+        public string? Observacion { get; set; }
+
+        public int CajaId { get; set; }
+
+        public string? NombreCaja { get; set; }
+
+        public int UsuarioAperturaId { get; set; }
+
+        public string? NombreUsuarioApertura { get; set; }
+
+        public int? UsuarioCierreId { get; set; }
+
+        public string? NombreUsuarioCierre { get; set; }
     }
 }

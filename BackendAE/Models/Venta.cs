@@ -42,7 +42,7 @@ namespace BackendAE.Models
         public int? CajaSesionId { get; set; }
         public CajaSesion? CajaSesion { get; set; }
 
-        // Relación 1:N
-        public ICollection<DetalleVenta>? DetallesVentas { get; set; }
+        // Propiedad de navegación 1:N con DetalleVenta
+        public ICollection<DetalleVenta>? DetalleVentas { get; set; }
     }
 }

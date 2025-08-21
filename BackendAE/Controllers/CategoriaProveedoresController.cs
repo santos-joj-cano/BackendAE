@@ -1,97 +1,79 @@
-﻿using BackendAE.Data;
+﻿using AutoMapper;
+using BackendAE.Data;
+using BackendAE.DTOs;
 using BackendAE.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace BackendAE.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class CategoriaProveedoresController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public CategoriaProveedoresController(ApplicationDbContext context)
+        public CategoriaProveedoresController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
+        // GET: api/CategoriaProveedores
         [HttpGet]
-        [Authorize(Roles = "Admin, Empleado")] // Access para Admin y Empleado
-        public async Task<ActionResult<IEnumerable<CategoriaProveedor>>> GetCategoriaProveedores()
+        public async Task<ActionResult<IEnumerable<CategoriaProveedorDTO>>> GetCategorias()
         {
-            return await _context.CategoriasProveedores.ToListAsync();
+            var categorias = await _context.CategoriasProveedores.ToListAsync();
+            return Ok(_mapper.Map<List<CategoriaProveedorDTO>>(categorias));
         }
 
-        [HttpGet("{id}")]
-        [Authorize(Roles = "Admin, Empleado")] // Access para Admin y Empleado
-        public async Task<ActionResult<CategoriaProveedor>> GetCategoriaProveedor(int id)
+        // GET: api/CategoriaProveedores/5
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<CategoriaProveedorDTO>> GetCategoria(int id)
         {
-            var categoriaProveedor = await _context.CategoriasProveedores.FindAsync(id);
-            if (categoriaProveedor == null)
-            {
-                return NotFound();
-            }
-            return categoriaProveedor;
-        }
+            var categoria = await _context.CategoriasProveedores.FindAsync(id);
+            if (categoria == null) return NotFound();
 
-        // PUT: api/CategoriaProveedores/5
-        [HttpPut("{id}")]
-        [Authorize(Roles = "Admin")] // Solo acceso para Admin
-        public async Task<IActionResult> PutCategoriaProveedor(int id, CategoriaProveedor categoriaProveedor)
-        {
-            if (id != categoriaProveedor.CatProveedorId)
-            {
-                return BadRequest();
-            }
-            _context.Entry(categoriaProveedor).State = EntityState.Modified;
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CategoriaProveedorExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            return NoContent();
+            return _mapper.Map<CategoriaProveedorDTO>(categoria);
         }
 
         // POST: api/CategoriaProveedores
         [HttpPost]
-        [Authorize(Roles = "Admin")] // Solo acceso para Admin
-        public async Task<ActionResult<CategoriaProveedor>> PostCategoriaProveedor(CategoriaProveedor categoriaProveedor)
+        public async Task<ActionResult> CrearCategoria([FromBody] CategoriaProveedorCreacionDTO dto)
         {
-            _context.CategoriasProveedores.Add(categoriaProveedor);
+            var categoria = _mapper.Map<CategoriaProveedor>(dto);
+            _context.CategoriasProveedores.Add(categoria);
             await _context.SaveChangesAsync();
-            return CreatedAtAction("GetCategoriaProveedor", new { id = categoriaProveedor.CatProveedorId }, categoriaProveedor);
+
+            var dtoCreado = _mapper.Map<CategoriaProveedorDTO>(categoria);
+            return CreatedAtAction(nameof(GetCategoria), new { id = categoria.CatProveedorId }, dtoCreado);
         }
 
-        // DELETE: api/CategoriaProveedores/5
-        [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")] // Solo acceso para Admin
-        public async Task<IActionResult> DeleteCategoriaProveedor(int id)
+        // PUT: api/CategoriaProveedores/5
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult> ActualizarCategoria(int id, [FromBody] CategoriaProveedorCreacionDTO dto)
         {
-            var categoriaProveedor = await _context.CategoriasProveedores.FindAsync(id);
-            if (categoriaProveedor == null)
-            {
-                return NotFound();
-            }
-            _context.CategoriasProveedores.Remove(categoriaProveedor);
+            var categoria = await _context.CategoriasProveedores.FindAsync(id);
+            if (categoria == null) return NotFound();
+
+            _mapper.Map(dto, categoria);
             await _context.SaveChangesAsync();
+
             return NoContent();
         }
 
-        private bool CategoriaProveedorExists(int id)
+        // DELETE: api/CategoriaProveedores/5
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> EliminarCategoria(int id)
         {
-            return _context.CategoriasProveedores.Any(e => e.CatProveedorId == id);
+            var categoria = await _context.CategoriasProveedores.FindAsync(id);
+            if (categoria == null) return NotFound();
+
+            _context.CategoriasProveedores.Remove(categoria);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }

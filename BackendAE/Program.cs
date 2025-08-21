@@ -1,10 +1,11 @@
 using BackendAE.Data;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.OpenApi.Models; // Necesario para la configuración de Swagger
+using BackendAE.Helpers;
 using BackendAE.Services; // Asegúrate de que este using sea correcto para tu proyecto
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models; // Necesario para la configuración de Swagger
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Servicio de correo
 builder.Services.AddScoped<EmailService>();
+// Configuración de AutoMapper
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 // Configuración de la aplicación
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 

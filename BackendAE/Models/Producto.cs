@@ -10,10 +10,6 @@ namespace BackendAE.Models
         public int ProductoId { get; set; }
 
         [Required]
-        [StringLength(50)]
-        public required string Codigo { get; set; }
-
-        [Required]
         [StringLength(120)]
         public required string Nombre { get; set; }
 
@@ -40,20 +36,11 @@ namespace BackendAE.Models
         [StringLength(40)]
         public string? SKU { get; set; }
 
-        [Required]
-        public required DateTime FechaRegistro { get; set; }
-
         // Clave foránea N:1 con CategoriaProducto
-        public int CategoriaProductoId { get; set; }
-        [ForeignKey("CategoriaProductoId")]
+        public int CategoriaId { get; set; }
+        [ForeignKey("CategoriaId")]
         public CategoriaProducto? CategoriaProducto { get; set; }
-
-        // Clave foránea N:1 con Proveedor
-        public int ProveedorId { get; set; }
-        [ForeignKey("ProveedorId")]
-        public Proveedor Proveedor { get; set; }
-
-        // Relaciones 1:N
+        // Relaciones 1:N con DetalleCompra y DetalleVenta
         public ICollection<DetalleCompra>? DetallesCompras { get; set; }
         public ICollection<DetalleVenta>? DetallesVentas { get; set; }
     }
