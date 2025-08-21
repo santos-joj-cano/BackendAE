@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackendAE.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250820052839_InitialMigration")]
+    [Migration("20250821035648_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -61,10 +61,6 @@ namespace BackendAE.Migrations
                     b.Property<int>("CajaId")
                         .HasColumnType("int");
 
-                    b.Property<string>("CodigoSesion")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Estado")
                         .IsRequired()
                         .HasMaxLength(10)
@@ -82,15 +78,9 @@ namespace BackendAE.Migrations
                     b.Property<decimal>("MontoCierre")
                         .HasColumnType("decimal(12, 2)");
 
-                    b.Property<decimal>("MontoInicial")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<string>("Observacion")
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
-
-                    b.Property<decimal>("TotalVentas")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("UsuarioAperturaId")
                         .HasColumnType("int");
@@ -98,7 +88,7 @@ namespace BackendAE.Migrations
                     b.Property<int?>("UsuarioCierreId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UsuarioId")
+                    b.Property<int?>("UsuarioId")
                         .HasColumnType("int");
 
                     b.HasKey("CajaSesionId");
@@ -185,14 +175,9 @@ namespace BackendAE.Migrations
                     b.Property<decimal>("Total")
                         .HasColumnType("decimal(12, 2)");
 
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("int");
-
                     b.HasKey("CompraId");
 
                     b.HasIndex("ProveedorId");
-
-                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Compras");
                 });
@@ -308,13 +293,8 @@ namespace BackendAE.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductoId"));
 
-                    b.Property<int>("CategoriaProductoId")
+                    b.Property<int>("CategoriaId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Codigo")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Descripcion")
                         .HasMaxLength(250)
@@ -322,9 +302,6 @@ namespace BackendAE.Migrations
 
                     b.Property<bool>("Estado")
                         .HasColumnType("bit");
-
-                    b.Property<DateTime>("FechaRegistro")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("ImagenUrl")
                         .HasMaxLength(250)
@@ -341,9 +318,6 @@ namespace BackendAE.Migrations
                     b.Property<decimal>("PrecioVenta")
                         .HasColumnType("decimal(10, 2)");
 
-                    b.Property<int>("ProveedorId")
-                        .HasColumnType("int");
-
                     b.Property<string>("SKU")
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)");
@@ -353,9 +327,7 @@ namespace BackendAE.Migrations
 
                     b.HasKey("ProductoId");
 
-                    b.HasIndex("CategoriaProductoId");
-
-                    b.HasIndex("ProveedorId");
+                    b.HasIndex("CategoriaId");
 
                     b.HasIndex("SKU")
                         .IsUnique()
@@ -582,15 +554,11 @@ namespace BackendAE.Migrations
                         .HasForeignKey("UsuarioCierreId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("BackendAE.Models.Usuario", "Usuario")
+                    b.HasOne("BackendAE.Models.Usuario", null)
                         .WithMany("CajaSesiones")
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .HasForeignKey("UsuarioId");
 
                     b.Navigation("Caja");
-
-                    b.Navigation("Usuario");
 
                     b.Navigation("UsuarioApertura");
 
@@ -605,15 +573,7 @@ namespace BackendAE.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BackendAE.Models.Usuario", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Proveedor");
-
-                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("BackendAE.Models.DetalleCompra", b =>
@@ -644,7 +604,7 @@ namespace BackendAE.Migrations
                         .IsRequired();
 
                     b.HasOne("BackendAE.Models.Venta", "Venta")
-                        .WithMany("DetallesVentas")
+                        .WithMany("DetalleVentas")
                         .HasForeignKey("VentaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -677,19 +637,11 @@ namespace BackendAE.Migrations
                 {
                     b.HasOne("BackendAE.Models.CategoriaProducto", "CategoriaProducto")
                         .WithMany("Productos")
-                        .HasForeignKey("CategoriaProductoId")
+                        .HasForeignKey("CategoriaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BackendAE.Models.Proveedor", "Proveedor")
-                        .WithMany("Productos")
-                        .HasForeignKey("ProveedorId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.Navigation("CategoriaProducto");
-
-                    b.Navigation("Proveedor");
                 });
 
             modelBuilder.Entity("BackendAE.Models.Proveedor", b =>
@@ -769,8 +721,6 @@ namespace BackendAE.Migrations
             modelBuilder.Entity("BackendAE.Models.Proveedor", b =>
                 {
                     b.Navigation("Compras");
-
-                    b.Navigation("Productos");
                 });
 
             modelBuilder.Entity("BackendAE.Models.Rol", b =>
@@ -793,7 +743,7 @@ namespace BackendAE.Migrations
 
             modelBuilder.Entity("BackendAE.Models.Venta", b =>
                 {
-                    b.Navigation("DetallesVentas");
+                    b.Navigation("DetalleVentas");
                 });
 #pragma warning restore 612, 618
         }

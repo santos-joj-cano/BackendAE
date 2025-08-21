@@ -9,11 +9,26 @@ namespace BackendAE.Helpers
         public AutoMapperProfiles()
         {
             // Usuarios
+            //CreateMap<Usuario, UsuarioDTO>()
+            //    .ForMember(dest => dest.NombreUsuario, opt =>
+            //        opt.MapFrom(src => $"{src.PrimerNombre} {src.PrimerApellido}"))
+            //    .ForMember(dest => dest.RolNombre, opt =>
+            //        opt.MapFrom(src => src.Rol != null ? src.Rol.RolNombre : null));
             CreateMap<Usuario, UsuarioDTO>()
-                .ForMember(dest => dest.NombreUsuario, opt =>
-                    opt.MapFrom(src => $"{src.PrimerNombre} {src.PrimerApellido}"))
-                .ForMember(dest => dest.RolNombre, opt =>
-                    opt.MapFrom(src => src.Rol != null ? src.Rol.RolNombre : null));
+                .ForMember(dest => dest.PrimerNombre, opt => opt.MapFrom(src => src.PrimerNombre))
+                .ForMember(dest => dest.SegundoNombre, opt => opt.MapFrom(src => src.SegundoNombre))
+                .ForMember(dest => dest.PrimerApellido, opt => opt.MapFrom(src => src.PrimerApellido))
+                .ForMember(dest => dest.SegundoApellido, opt => opt.MapFrom(src => src.SegundoApellido))
+                .ForMember(dest => dest.NIT, opt => opt.MapFrom(src => src.NIT))
+                .ForMember(dest => dest.CUI, opt => opt.MapFrom(src => src.CUI))
+                .ForMember(dest => dest.FechaNacimiento, opt => opt.MapFrom(src => src.FechaNacimiento))
+                .ForMember(dest => dest.Telefono, opt => opt.MapFrom(src => src.Telefono))
+                .ForMember(dest => dest.Direccion, opt => opt.MapFrom(src => src.Direccion))
+                .ForMember(dest => dest.Genero, opt => opt.MapFrom(src => src.Genero))
+                .ForMember(dest => dest.NombreUsuario, opt => opt.MapFrom(src => src.NombreUsuario))
+                .ForMember(dest => dest.Estado, opt => opt.MapFrom(src => src.Estado))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.RolId, opt => opt.MapFrom(src => src.RolId));
 
             CreateMap<UsuarioCreacionDTO, Usuario>()
                 .ForMember(dest => dest.PasswordHash, opt => opt.Ignore());

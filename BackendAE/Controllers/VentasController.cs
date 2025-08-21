@@ -63,6 +63,21 @@ namespace BackendAE.Controllers
             return CreatedAtAction(nameof(GetVenta), new { id = venta.VentaId }, ventaDTO);
         }
 
+        // PUT: api/Ventas/5
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult> ActualizarVenta(int id, [FromBody] VentaDTO dto)
+        {
+            if (id != dto.VentaId) return BadRequest("El ID de la venta no coincide.");
+            var venta = await _context.Ventas
+                .Include(v => v.DetalleVentas)
+                .FirstOrDefaultAsync(v => v.VentaId == id);
+            if (venta == null) return NotFound();
+            _mapper.Map(dto, venta);
+            _context.Entry(venta).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
         // DELETE: api/Ventas/5
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> EliminarVenta(int id)

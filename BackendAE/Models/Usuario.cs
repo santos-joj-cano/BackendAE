@@ -58,6 +58,9 @@ namespace BackendAE.Models
         [StringLength(255)]
         public required string PasswordHash { get; set; }
 
+        // Tiempo de contraseña
+        public DateTime FechaUltimoCambioContrasena { get; set; }
+
         // Clave foránea para la relación N:1 con Roles
         [ForeignKey("Rol")]
         public int RolId { get; set; }

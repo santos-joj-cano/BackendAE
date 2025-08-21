@@ -2,6 +2,7 @@
 using BackendAE.Data;
 using BackendAE.DTOs;
 using BackendAE.Models;
+using BackendAE.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Crypto;
@@ -14,11 +15,14 @@ namespace BackendAE.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
+        private readonly EmailService _emailService; // Inyectar el servicio de email
 
-        public UsuariosController(ApplicationDbContext context, IMapper mapper)
+
+        public UsuariosController(ApplicationDbContext context, IMapper mapper, EmailService emailService)
         {
             _context = context;
             _mapper = mapper;
+            _emailService = emailService; // Se asigna la instancia inyectada
         }
 
         // GET: api/Usuarios
@@ -47,28 +51,118 @@ namespace BackendAE.Controllers
         }
 
         // POST: api/Usuarios
+        //[HttpPost]
+        //public async Task<ActionResult> CrearUsuario([FromBody] UsuarioCreacionDTO dto)
+        //{
+        //    var usuario = _mapper.Map<Usuario>(dto);
+        //    usuario.PasswordHash = dto.Contrasena; // Aquí deberías aplicar hashing
+
+        //    _context.Usuarios.Add(usuario);
+        //    await _context.SaveChangesAsync();
+
+        //    var usuarioDTO = _mapper.Map<UsuarioDTO>(usuario);
+        //    return CreatedAtAction(nameof(GetUsuario), new { id = usuario.UsuarioId }, usuarioDTO);
+        //}
+        // POST: api/Usuarios
         [HttpPost]
         public async Task<ActionResult> CrearUsuario([FromBody] UsuarioCreacionDTO dto)
         {
-            var usuario = _mapper.Map<Usuario>(dto);
-            usuario.PasswordHash = dto.Contrasena; // Aquí deberías aplicar hashing
+            // Verificación de campos obligatorios
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
+            // Validar si el RolId existe
+            var rolExistente = await _context.Roles.FindAsync(dto.RolId);
+            if (rolExistente == null)
+            {
+                return BadRequest("El RolId especificado no existe.");
+            }
+
+            // 1. Mapear DTO a la entidad de Usuario
+            var usuario = _mapper.Map<Usuario>(dto);
+
+            // 2. Generar y cifrar la contraseña
+            var contrasenaTemporal = Guid.NewGuid().ToString().Substring(0, 8);
+            usuario.PasswordHash = BCrypt.Net.BCrypt.HashPassword(contrasenaTemporal);
+
+            // 3. Asignar FechaUltimoCambioContrasena
+            usuario.FechaUltimoCambioContrasena = DateTime.UtcNow;
+
+            // 4. Agregar el usuario al contexto
             _context.Usuarios.Add(usuario);
-            await _context.SaveChangesAsync();
+
+            try
+            {
+                // 5. Guardar los cambios en la base de datos
+                await _context.SaveChangesAsync();
+
+                // 6. Enviar el email solo si el guardado fue exitoso
+                var templatePath = Path.Combine(Directory.GetCurrentDirectory(), "EmailTemplates", "Bienvenida.html");
+                var replacements = new Dictionary<string, string>
+        {
+            { "@PrimerNombre", usuario.PrimerNombre },
+            { "@ContrasenaTemporal", contrasenaTemporal }
+        };
+                await _emailService.SendEmailAsync(usuario.Email, "Bienvenido a nuestro sistema", templatePath, replacements);
+            }
+            catch (DbUpdateException ex)
+            {
+                // Puedes ver los detalles de la excepción interna para depurar
+                var innerExceptionMessage = ex.InnerException?.Message;
+                // Devuelve un error genérico en producción para no exponer detalles sensibles
+                return StatusCode(500, $"Ocurrió un error al guardar el usuario: {innerExceptionMessage}");
+            }
 
             var usuarioDTO = _mapper.Map<UsuarioDTO>(usuario);
             return CreatedAtAction(nameof(GetUsuario), new { id = usuario.UsuarioId }, usuarioDTO);
         }
 
+        private string GenerateRandomPassword()
+        {
+            return Guid.NewGuid().ToString().Substring(0, 8); // Genera una cadena aleatoria de 8 caracteres
+        }
+
         // PUT: api/Usuarios/5
+        //[HttpPut("{id:int}")]
+        //public async Task<ActionResult> ActualizarUsuario(int id, [FromBody] UsuarioCreacionDTO dto)
+        //{
+        //    var usuario = await _context.Usuarios.FindAsync(id);
+        //    if (usuario == null) return NotFound();
+
+        //    _mapper.Map(dto, usuario);
+        //    usuario.PasswordHash = dto.Contrasena; // Aquí también debería aplicarse hashing
+
+        //    await _context.SaveChangesAsync();
+        //    return NoContent();
+        //}
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> ActualizarUsuario(int id, [FromBody] UsuarioCreacionDTO dto)
+        public async Task<ActionResult> ActualizarUsuario(int id, [FromBody] UsuarioActualizacionDTO dto)
         {
             var usuario = await _context.Usuarios.FindAsync(id);
             if (usuario == null) return NotFound();
 
+            // Mapea solo los campos actualizables
             _mapper.Map(dto, usuario);
-            usuario.PasswordHash = dto.Contrasena; // Aquí también debería aplicarse hashing
+
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        [HttpPatch("{id:int}/cambiar-contrasena")]
+        public async Task<ActionResult> CambiarContrasena(int id, [FromBody] CambioContrasenaDTO dto)
+        {
+            var usuario = await _context.Usuarios.FindAsync(id);
+            if (usuario == null) return NotFound();
+
+            if (!BCrypt.Net.BCrypt.Verify(dto.ContrasenaActual, usuario.PasswordHash))
+            {
+                return BadRequest("La contraseña actual es incorrecta.");
+            }
+
+            usuario.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.NuevaContrasena);
+            usuario.FechaUltimoCambioContrasena = DateTime.UtcNow; // <--- Agrega esta línea
 
             await _context.SaveChangesAsync();
             return NoContent();

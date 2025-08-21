@@ -35,6 +35,13 @@ namespace BackendAE.Controllers
                 return Unauthorized("Usuario o contraseña incorrectos.");
             }
 
+            // Lógica de caducidad
+            var diasDeCaducidad = 90; // Puedes mover este valor a appsettings.json
+            if (user.FechaUltimoCambioContrasena.AddDays(diasDeCaducidad) < DateTime.UtcNow)
+            {
+                // Devolver un código de estado específico o un mensaje claro
+                return Forbid("La contraseña ha caducado. Por favor, cámbiela para continuar.");
+            }
             // Generar el token
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);

@@ -32,6 +32,6 @@
 
         public int RolId { get; set; }
 
-        public string? RolNombre { get; set; } // Opcional, si deseas mostrar el nombre del rol
+        //public string? RolNombre { get; set; } // Opcional, si deseas mostrar el nombre del rol
     }
 }

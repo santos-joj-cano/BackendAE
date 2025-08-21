@@ -2,8 +2,7 @@
 {
     public class RolDTO
     {
-        public int RolId { get; set; }
-
+        //public int RolId { get; set; }
         public string RolNombre { get; set; } = null!;
     }
 }

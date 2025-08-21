@@ -61,6 +61,21 @@ namespace BackendAE.Controllers
             return CreatedAtAction(nameof(GetCompra), new { id = compra.CompraId }, compraDTO);
         }
 
+        // PUT: api/Compras/5
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult> ActualizarCompra(int id, [FromBody] CompraDTO dto)
+        {
+            if (id != dto.CompraId) return BadRequest("El ID de la compra no coincide.");
+            var compra = await _context.Compras
+                .Include(c => c.DetalleCompras)
+                .FirstOrDefaultAsync(c => c.CompraId == id);
+            if (compra == null) return NotFound();
+            _mapper.Map(dto, compra);
+            _context.Entry(compra).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
         // DELETE: api/Compras/5
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> EliminarCompra(int id)
