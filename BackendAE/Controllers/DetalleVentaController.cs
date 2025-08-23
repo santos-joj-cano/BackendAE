@@ -46,33 +46,33 @@ namespace BackendAE.Controllers
             return _mapper.Map<DetalleVentaDTO>(detalle);
         }
 
-        // POST: api/DetalleVentas
-        [HttpPost]
-        public async Task<ActionResult> CrearDetalleVenta([FromBody] DetalleVentaCreacionDTO dto)
-        {
-            var detalle = _mapper.Map<DetalleVenta>(dto);
+        //// POST: api/DetalleVentas
+        //[HttpPost]
+        //public async Task<ActionResult> CrearDetalleVenta([FromBody] DetalleVentaCreacionDTO dto)
+        //{
+        //    var detalle = _mapper.Map<DetalleVenta>(dto);
 
-            _context.DetallesVentas.Add(detalle);
-            await _context.SaveChangesAsync();
+        //    _context.DetallesVentas.Add(detalle);
+        //    await _context.SaveChangesAsync();
 
-            var dtoCreado = _mapper.Map<DetalleVentaDTO>(detalle);
+        //    var dtoCreado = _mapper.Map<DetalleVentaDTO>(detalle);
 
-            return CreatedAtAction(nameof(GetDetalleVenta), new { id = detalle.DetalleVentaId }, dtoCreado);
-        }
+        //    return CreatedAtAction(nameof(GetDetalleVenta), new { id = detalle.DetalleVentaId }, dtoCreado);
+        //}
 
         // PUT: api/DetalleVentas/5
-        [HttpPut("{id:int}")]
-        public async Task<ActionResult> ActualizarDetalleVenta(int id, [FromBody] DetalleVentaCreacionDTO dto)
-        {
-            var detalle = await _context.DetallesVentas.FindAsync(id);
+        //[HttpPut("{id:int}")]
+        //public async Task<ActionResult> ActualizarDetalleVenta(int id, [FromBody] DetalleVentaCreacionDTO dto)
+        //{
+        //    var detalle = await _context.DetallesVentas.FindAsync(id);
 
-            if (detalle == null) return NotFound();
+        //    if (detalle == null) return NotFound();
 
-            _mapper.Map(dto, detalle);
-            await _context.SaveChangesAsync();
+        //    _mapper.Map(dto, detalle);
+        //    await _context.SaveChangesAsync();
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
         // DELETE: api/DetalleVentas/5
         [HttpDelete("{id:int}")]

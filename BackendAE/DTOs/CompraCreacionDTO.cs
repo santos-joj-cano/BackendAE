@@ -2,9 +2,11 @@
 {
     public class CompraCreacionDTO
     {
-        //public required DateTime FechaCompra { get; set; }
+        public required DateTime FechaCompra { get; set; }
 
         public string? Observacion { get; set; }
+
+        public decimal Total { get; set; }
 
         public int ProveedorId { get; set; }
 

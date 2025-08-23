@@ -22,10 +22,8 @@
 
         public int UsuarioAperturaId { get; set; }
 
-        public string? NombreUsuarioApertura { get; set; }
-
         public int? UsuarioCierreId { get; set; }
 
-        public string? NombreUsuarioCierre { get; set; }
+        public int? UsuarioId { get; set; }
     }
 }

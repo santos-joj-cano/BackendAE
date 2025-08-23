@@ -4,22 +4,18 @@ namespace BackendAE.DTOs
 {
     public class MovimientoCajaCreacionDTO
     {
-        [Required]
-        [StringLength(12)]
-        public required string Tipo { get; set; }
+        
+        public string Tipo { get; set; } = null!;
 
-        [Required]
-        [StringLength(120)]
-        public required string Concepto { get; set; }
+        public string Concepto { get; set; } = null!;
 
-        [Required]
-        [Range(0, double.MaxValue, ErrorMessage = "El monto no puede ser un valor negativo.")]
-        public required decimal Monto { get; set; }
+        public decimal Monto { get; set; }
 
-        [Required]
-        public required int CajaSesionId { get; set; }
+        public DateTime Fecha { get; set; }
 
-        [Required]
-        public required int UsuarioId { get; set; }
-    }
+        public int CajaSesionId { get; set; }
+
+        public int? UsuarioId { get; set; }
+
+    }   
 }

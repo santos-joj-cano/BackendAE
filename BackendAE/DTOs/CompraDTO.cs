@@ -12,7 +12,7 @@
 
         public int ProveedorId { get; set; }
 
-        public string? NombreProveedor { get; set; }
+        public string? NombreEncargado { get; set; }
 
         public List<DetalleCompraDTO> DetalleCompras { get; set; } = new();
     }

@@ -14,8 +14,6 @@
 
         public int CajaSesionId { get; set; }
 
-        public int UsuarioId { get; set; }
-
-        public string? NombreUsuario { get; set; }
+        public int? UsuarioId { get; set; }
     }
 }

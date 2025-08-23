@@ -21,6 +21,8 @@ namespace BackendAE.Models
         public required string Estado { get; set; }
         [StringLength(250)]
         public string? Observacion { get; set; }
+
+        public int UsuarioId { get; set; }
         // Clave foránea N:1 con Caja
         [ForeignKey("Caja")]
         public int CajaId { get; set; }

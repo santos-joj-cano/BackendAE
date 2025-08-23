@@ -56,6 +56,10 @@ namespace BackendAE.Controllers
         {
             var venta = _mapper.Map<Venta>(dto);
 
+            venta.CodigoVenta = "VTA-" + DateTime.Now.ToString("yyyyMMddHHmmss"); // Or generate it however you need.
+            venta.FechaVenta = DateTime.Now;
+            
+
             _context.Ventas.Add(venta);
             await _context.SaveChangesAsync();
 

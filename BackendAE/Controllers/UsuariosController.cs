@@ -103,6 +103,7 @@ namespace BackendAE.Controllers
                 var replacements = new Dictionary<string, string>
         {
             { "@PrimerNombre", usuario.PrimerNombre },
+            { "@NombreUsuario", usuario.NombreUsuario },
             { "@ContrasenaTemporal", contrasenaTemporal }
         };
                 await _emailService.SendEmailAsync(usuario.Email, "Bienvenido a nuestro sistema", templatePath, replacements);

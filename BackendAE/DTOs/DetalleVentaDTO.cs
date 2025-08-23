@@ -2,11 +2,10 @@
 {
     public class DetalleVentaDTO
     {
-        public int DetalleVentaId { get; set; }
 
         public int ProductoId { get; set; }
 
-        public string? NombreProducto { get; set; } // Lo puedes llenar desde Producto.Nombre
+        //public int VentaId { get; set; }
 
         public int Cantidad { get; set; }
 
