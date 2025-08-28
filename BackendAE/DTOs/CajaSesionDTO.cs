@@ -24,6 +24,6 @@
 
         public int? UsuarioCierreId { get; set; }
 
-        public int? UsuarioId { get; set; }
+        //public int? UsuarioId { get; set; }
     }
 }
