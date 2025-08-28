@@ -28,7 +28,9 @@ namespace BackendAE.Helpers
                 .ForMember(dest => dest.NombreUsuario, opt => opt.MapFrom(src => src.NombreUsuario))
                 .ForMember(dest => dest.Estado, opt => opt.MapFrom(src => src.Estado))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
-                .ForMember(dest => dest.RolId, opt => opt.MapFrom(src => src.RolId));
+                .ForMember(dest => dest.RolId, opt => opt.MapFrom(src => src.RolId))
+                .ForMember(dest => dest.RolNombre, opt => opt.MapFrom(src => src.Rol != null ? src.Rol.RolNombre : null));
+
 
             CreateMap<UsuarioCreacionDTO, Usuario>()
                 .ForMember(dest => dest.PasswordHash, opt => opt.Ignore());
