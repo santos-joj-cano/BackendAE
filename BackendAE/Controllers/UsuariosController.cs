@@ -81,9 +81,22 @@ namespace BackendAE.Controllers
             }
 
             // 1. Mapear DTO a la entidad de Usuario
+            //var usuario = _mapper.Map<Usuario>(dto);
+            var nombreGenerado = $"{dto.PrimerNombre.ToLower().Substring(0, Math.Min(dto.PrimerNombre.Length, 3))}" +
+                         $"{dto.PrimerApellido.ToLower().Substring(0, Math.Min(dto.PrimerApellido.Length, 3))}";
+            
+            var usuarioExistente = await _context.Usuarios.FirstOrDefaultAsync(u => u.NombreUsuario == nombreGenerado);
+            if (usuarioExistente != null)
+            {
+                // Puedes agregar una lógica para hacerlo único, por ejemplo, con un número.
+                // Para este ejemplo, solo devolvemos un error.
+                return BadRequest("El nombre de usuario generado ya existe. Por favor, intente con otro nombre o apellido.");
+            }
+
             var usuario = _mapper.Map<Usuario>(dto);
 
             // 2. Generar y cifrar la contraseña
+            usuario.NombreUsuario = nombreGenerado;
             var contrasenaTemporal = Guid.NewGuid().ToString().Substring(0, 8);
             usuario.PasswordHash = BCrypt.Net.BCrypt.HashPassword(contrasenaTemporal);
 

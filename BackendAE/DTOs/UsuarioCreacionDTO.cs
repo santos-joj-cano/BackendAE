@@ -19,8 +19,8 @@ namespace BackendAE.DTOs
         // public required string Contrasena { get; set; } 
 
         public int RolId { get; set; }
-        [Required]
-        public string NombreUsuario { get; set; } = null!;
+        //[Required]
+        //public string NombreUsuario { get; set; } = null!;
         public bool Estado { get; set; } = true;
         public string? NIT { get; set; }
         public string? CUI { get; set; }
