@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackendAE.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250821035648_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20250828064342_IntialMigration")]
+    partial class IntialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -421,6 +421,9 @@ namespace BackendAE.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("FechaNacimiento")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaUltimoCambioContrasena")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Genero")

@@ -116,9 +116,9 @@ namespace BackendAE.Helpers
             // CajaSesion
             CreateMap<CajaSesion, CajaSesionDTO>()
             .ForMember(dest => dest.NombreCaja, opt =>
-                opt.MapFrom(src => src.Caja != null ? src.Caja.Nombre : null))
-            .ForMember(dest => dest.UsuarioId, opt =>
-                opt.MapFrom(src => src.UsuarioCierre != null ? src.UsuarioCierre.UsuarioId : (int?)null));
+                opt.MapFrom(src => src.Caja != null ? src.Caja.Nombre : null));
+            //.ForMember(dest => dest.UsuarioId, opt =>
+            //    opt.MapFrom(src => src.UsuarioCierre != null ? src.UsuarioCierre.UsuarioId : (int?)null));
 
             // Mapear de DTO de creación a entidad
             CreateMap<CajaSesionCreacionDTO, CajaSesion>();

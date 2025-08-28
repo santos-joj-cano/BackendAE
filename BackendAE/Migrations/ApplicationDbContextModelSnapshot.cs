@@ -85,7 +85,7 @@ namespace BackendAE.Migrations
                     b.Property<int?>("UsuarioCierreId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UsuarioId")
+                    b.Property<int?>("UsuarioId")
                         .HasColumnType("int");
 
                     b.HasKey("CajaSesionId");
@@ -556,9 +556,7 @@ namespace BackendAE.Migrations
 
                     b.HasOne("BackendAE.Models.Usuario", null)
                         .WithMany("CajaSesiones")
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UsuarioId");
 
                     b.Navigation("Caja");
 
