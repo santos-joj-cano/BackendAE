@@ -2,6 +2,7 @@
 using BackendAE.Data;
 using BackendAE.DTOs;
 using BackendAE.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,6 +23,7 @@ namespace BackendAE.Controllers
 
         // GET: api/Caja
         [HttpGet]
+        [Authorize(Policy = "Admin,Empleado")]
         public async Task<ActionResult<IEnumerable<CajaDTO>>> GetCajas()
         {
             var cajas = await _context.Cajas.ToListAsync();
@@ -29,6 +31,7 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/Caja/5
+        [Authorize(Policy = "Admin,Empleado")]
         [HttpGet("{id:int}")]
         public async Task<ActionResult<CajaDTO>> GetCaja(int id)
         {
@@ -39,6 +42,7 @@ namespace BackendAE.Controllers
         }
 
         // POST: api/Caja
+        [Authorize(Policy = "Admin,Empleado")]
         [HttpPost]
         public async Task<ActionResult> CrearCaja([FromBody] CajaCreacionDTO dto)
         {
@@ -52,6 +56,7 @@ namespace BackendAE.Controllers
         }
 
         // PUT: api/Caja/5
+        [Authorize(Policy = "Admin,Empleado")]
         [HttpPut("{id:int}")]
         public async Task<ActionResult> ActualizarCaja(int id, [FromBody] CajaCreacionDTO dto)
         {
@@ -65,6 +70,7 @@ namespace BackendAE.Controllers
         }
 
         // DELETE: api/Caja/5
+        [Authorize(Policy = "Admin")]
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> EliminarCaja(int id)
         {

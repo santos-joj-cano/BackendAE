@@ -2,6 +2,7 @@ using BackendAE.Data;
 using BackendAE.Helpers;
 using BackendAE.Services; // Asegúrate de que este using sea correcto para tu proyecto
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -24,6 +25,18 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new DateTimeJsonConverter());
         options.JsonSerializerOptions.Converters.Add(new NullableDateTimeJsonConverter());
     });
+
+// Roles access management
+builder.Services.AddSingleton<IAuthorizationHandler, DynamicRoleHandler>();
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("Empleado", policy => policy.RequireRole("Empleado"));
+    options.AddPolicy("Bodeguero", policy => policy.RequireRole("Bodeguero"));
+    options.AddPolicy("Contador", policy => policy.RequireRole("Contador"));
+});
+
 // Servicio de correo
 builder.Services.AddScoped<EmailService>();
 // Configuración de AutoMapper

@@ -2,6 +2,7 @@
 using BackendAE.Data;
 using BackendAE.DTOs;
 using BackendAE.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +22,7 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/Productos
+        [Authorize(Policy = "Admin,Empleado")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductoDTO>>> GetProductos()
         {
@@ -33,6 +35,7 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/Productos/5
+        [Authorize(Policy = "Admin,Empleado")]
         [HttpGet("{id:int}")]
         public async Task<ActionResult<ProductoDTO>> GetProducto(int id)
         {
@@ -46,6 +49,7 @@ namespace BackendAE.Controllers
         }
 
         // POST: api/Productos
+        [Authorize(Policy = "Admin")]
         [HttpPost]
         public async Task<ActionResult> CrearProducto([FromBody] ProductoCreacionDTO dto)
         {
@@ -59,6 +63,7 @@ namespace BackendAE.Controllers
         }
 
         // PUT: api/Productos/5
+        [Authorize(Policy = "Admin")]
         [HttpPut("{id:int}")]
         public async Task<ActionResult> ActualizarProducto(int id, [FromBody] ProductoCreacionDTO dto)
         {
@@ -72,6 +77,7 @@ namespace BackendAE.Controllers
         }
 
         // DELETE: api/Productos/5
+        [Authorize(Policy = "Admin")]
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> EliminarProducto(int id)
         {

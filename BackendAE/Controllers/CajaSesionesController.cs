@@ -2,6 +2,7 @@
 using BackendAE.Data;
 using BackendAE.DTOs;
 using BackendAE.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +22,7 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/CajaSesiones
+        [Authorize(Policy = "Admin,Empleado")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CajaSesionDTO>>> GetCajaSesiones()
         {
@@ -34,6 +36,7 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/CajaSesiones/5
+        [Authorize(Policy = "Admin,Empleado")]
         [HttpGet("{id:int}")]
         public async Task<ActionResult<CajaSesionDTO>> GetCajaSesion(int id)
         {
@@ -49,6 +52,7 @@ namespace BackendAE.Controllers
         }
 
         // POST: api/CajaSesiones
+        [Authorize(Policy = "Admin")]
         [HttpPost]
         public async Task<ActionResult> CrearCajaSesion([FromBody] CajaSesionCreacionDTO dto)
         {
@@ -63,6 +67,7 @@ namespace BackendAE.Controllers
         }
 
         // PUT: api/CajaSesiones/5
+        [Authorize(Policy = "Admin")]
         [HttpPut("{id:int}")]
         public async Task<ActionResult> ActualizarCajaSesion(int id, [FromBody] CajaSesionCreacionDTO dto)
         {
@@ -77,6 +82,7 @@ namespace BackendAE.Controllers
         }
 
         // DELETE: api/CajaSesiones/5
+        [Authorize(Policy = "Admin")]
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> EliminarCajaSesion(int id)
         {

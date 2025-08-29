@@ -2,6 +2,7 @@
 using BackendAE.Data;
 using BackendAE.DTOs;
 using BackendAE.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +22,7 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/Compras
+        [Authorize(Policy = "Admin,Empleado")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CompraDTO>>> GetCompras()
         {
@@ -34,6 +36,7 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/Compras/5
+        [Authorize(Policy = "Admin,Empleado")]
         [HttpGet("{id:int}")]
         public async Task<ActionResult<CompraDTO>> GetCompra(int id)
         {
@@ -49,6 +52,7 @@ namespace BackendAE.Controllers
         }
 
         // POST: api/Compras
+        [Authorize(Policy = "Admin,Empleado")]
         [HttpPost]
         public async Task<ActionResult> CrearCompra([FromBody] CompraCreacionDTO dto)
         {
@@ -62,6 +66,7 @@ namespace BackendAE.Controllers
         }
 
         // PUT: api/Compras/5
+        [Authorize(Policy = "Admin,Empleado")]
         [HttpPut("{id:int}")]
         public async Task<ActionResult> ActualizarCompra(int id, [FromBody] CompraDTO dto)
         {
@@ -77,6 +82,7 @@ namespace BackendAE.Controllers
         }
 
         // DELETE: api/Compras/5
+        [Authorize(Policy = "Admin,Empleado")]
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> EliminarCompra(int id)
         {

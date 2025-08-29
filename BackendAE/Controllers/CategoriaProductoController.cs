@@ -2,6 +2,7 @@
 using BackendAE.Data;
 using BackendAE.DTOs;
 using BackendAE.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +22,7 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/CategoriaProducto
+        [Authorize(Policy = "Admin,Empleado")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CategoriaProductoDTO>>> GetCategorias()
         {
@@ -29,6 +31,7 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/CategoriaProducto/5
+        [Authorize(Policy = "Admin,Empleado")]
         [HttpGet("{id:int}")]
         public async Task<ActionResult<CategoriaProductoDTO>> GetCategoria(int id)
         {
@@ -39,6 +42,7 @@ namespace BackendAE.Controllers
         }
 
         // POST: api/CategoriaProducto
+        [Authorize(Policy = "Admin,Empleado")]
         [HttpPost]
         public async Task<ActionResult> CrearCategoria([FromBody] CategoriaProductoCreacionDTO dto)
         {
@@ -52,6 +56,7 @@ namespace BackendAE.Controllers
         }
 
         // PUT: api/CategoriaProducto/5
+        [Authorize(Policy = "Admin,Empleado")]
         [HttpPut("{id:int}")]
         public async Task<ActionResult> ActualizarCategoria(int id, [FromBody] CategoriaProductoCreacionDTO dto)
         {
@@ -65,6 +70,7 @@ namespace BackendAE.Controllers
         }
 
         // DELETE: api/CategoriaProducto/5
+        [Authorize(Policy = "Admin")]
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> EliminarCategoria(int id)
         {

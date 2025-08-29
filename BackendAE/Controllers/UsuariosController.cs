@@ -27,6 +27,7 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/Usuarios
+        [Authorize(Policy = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UsuarioDTO>>> GetUsuarios()
         {
@@ -39,6 +40,7 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/Usuarios/5
+        [Authorize(Policy = "Admin")]
         [HttpGet("{id:int}")]
         public async Task<ActionResult<UsuarioDTO>> GetUsuario(int id)
         {
@@ -65,7 +67,8 @@ namespace BackendAE.Controllers
         //    return CreatedAtAction(nameof(GetUsuario), new { id = usuario.UsuarioId }, usuarioDTO);
         //}
         // POST: api/Usuarios
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
+        [Authorize(Policy = "Admin")]
         [HttpPost]
         public async Task<ActionResult> CrearUsuario([FromBody] UsuarioCreacionDTO dto)
         {
@@ -114,7 +117,9 @@ namespace BackendAE.Controllers
                 await _context.SaveChangesAsync();
 
                 // 6. Enviar el email solo si el guardado fue exitoso
-                var templatePath = Path.Combine(Directory.GetCurrentDirectory(), "EmailTemplates", "Bienvenida.html");
+                //var templatePath = Path.Combine(Directory.GetCurrentDirectory(), "EmailTemplates", "Bienvenida.html");
+                //var replacements = new Dictionary<string, string>
+                var templatePath = Path.Combine(Directory.GetCurrentDirectory(), "EmailTemplates", "BienvenidaUsuario.html");
                 var replacements = new Dictionary<string, string>
         {
             { "@PrimerNombre", usuario.PrimerNombre },
@@ -135,10 +140,10 @@ namespace BackendAE.Controllers
             return CreatedAtAction(nameof(GetUsuario), new { id = usuario.UsuarioId }, usuarioDTO);
         }
 
-        private string GenerateRandomPassword()
-        {
-            return Guid.NewGuid().ToString().Substring(0, 8); // Genera una cadena aleatoria de 8 caracteres
-        }
+        //private string GenerateRandomPassword()
+        //{
+        //    return Guid.NewGuid().ToString().Substring(0, 8); // Genera una cadena aleatoria de 8 caracteres
+        //}
 
         // PUT: api/Usuarios/5
         //[HttpPut("{id:int}")]
@@ -153,6 +158,8 @@ namespace BackendAE.Controllers
         //    await _context.SaveChangesAsync();
         //    return NoContent();
         //}
+
+        [Authorize(Policy = "Admin")]
         [HttpPut("{id:int}")]
         public async Task<ActionResult> ActualizarUsuario(int id, [FromBody] UsuarioActualizacionDTO dto)
         {
@@ -166,6 +173,7 @@ namespace BackendAE.Controllers
             return NoContent();
         }
 
+        [Authorize(Policy = "Admin,Empleado")]
         [HttpPatch("{id:int}/cambiar-contrasena")]
         public async Task<ActionResult> CambiarContrasena(int id, [FromBody] CambioContrasenaDTO dto)
         {
@@ -185,6 +193,7 @@ namespace BackendAE.Controllers
         }
 
         // DELETE: api/Usuarios/5
+        [Authorize(Policy = "Admin")]
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> EliminarUsuario(int id)
         {

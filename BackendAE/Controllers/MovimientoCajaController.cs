@@ -2,6 +2,7 @@
 using BackendAE.Data;
 using BackendAE.DTOs;
 using BackendAE.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +22,7 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/MovimientoCajas
+        [Authorize(Policy = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MovimientoCajaDTO>>> GetMovimientoCajas()
         {
@@ -33,6 +35,7 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/MovimientoCajas/5
+        [Authorize(Policy = "Admin")]
         [HttpGet("{id:int}")]
         public async Task<ActionResult<MovimientoCajaDTO>> GetMovimientoCaja(int id)
         {
@@ -47,6 +50,7 @@ namespace BackendAE.Controllers
         }
 
         // POST: api/MovimientoCajas
+        [Authorize(Policy = "Admin")]
         [HttpPost]
         public async Task<ActionResult> CrearMovimientoCaja([FromBody] MovimientoCajaCreacionDTO dto)
         {
@@ -75,6 +79,7 @@ namespace BackendAE.Controllers
         }
 
         // DELETE: api/MovimientoCajas/5
+        [Authorize(Policy = "Admin")]
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> EliminarMovimientoCaja(int id)
         {

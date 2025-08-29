@@ -2,6 +2,7 @@
 using BackendAE.Data;
 using BackendAE.DTOs;
 using BackendAE.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +22,7 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/Proveedores
+        [Authorize(Policy = "Admin,Empleado")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProveedorDTO>>> GetProveedores()
         {
@@ -33,6 +35,7 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/Proveedores/5
+        [Authorize(Policy = "Admin,Empleado")]
         [HttpGet("{id:int}")]
         public async Task<ActionResult<ProveedorDTO>> GetProveedor(int id)
         {
@@ -46,6 +49,7 @@ namespace BackendAE.Controllers
         }
 
         // POST: api/Proveedores
+        [Authorize(Policy = "Admin")]
         [HttpPost]
         public async Task<ActionResult> CrearProveedor([FromBody] ProveedorCreacionDTO dto)
         {
@@ -58,6 +62,7 @@ namespace BackendAE.Controllers
         }
 
         // PUT: api/Proveedores/5
+        [Authorize(Policy = "Admin")]
         [HttpPut("{id:int}")]
         public async Task<ActionResult> ActualizarProveedor(int id, [FromBody] ProveedorCreacionDTO dto)
         {
@@ -71,6 +76,7 @@ namespace BackendAE.Controllers
         }
 
         // DELETE: api/Proveedores/5
+        [Authorize(Policy = "Admin")]
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> EliminarProveedor(int id)
         {

@@ -2,6 +2,7 @@
 using BackendAE.Data;
 using BackendAE.DTOs;
 using BackendAE.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +22,7 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/DetalleCompras
+        [Authorize(Policy = "Admin,Empleado")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DetalleCompraDTO>>> GetDetalleCompras()
         {
@@ -33,6 +35,7 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/DetalleCompras/5
+        [Authorize(Policy = "Admin,Empleado")]
         [HttpGet("{id:int}")]
         public async Task<ActionResult<DetalleCompraDTO>> GetDetalleCompra(int id)
         {
@@ -75,6 +78,7 @@ namespace BackendAE.Controllers
         //}
 
         // DELETE: api/DetalleCompras/5
+        [Authorize(Policy = "Admin")]
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> EliminarDetalleCompra(int id)
         {

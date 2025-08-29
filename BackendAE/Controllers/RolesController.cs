@@ -2,6 +2,7 @@
 using BackendAE.Data;
 using BackendAE.DTOs;
 using BackendAE.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +22,7 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/Roles
+        [Authorize(Policy = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RolDTO>>> GetRoles()
         {
@@ -29,6 +31,7 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/Roles/5
+        [Authorize(Policy = "Admin")]
         [HttpGet("{id:int}")]
         public async Task<ActionResult<RolDTO>> GetRol(int id)
         {
@@ -38,6 +41,7 @@ namespace BackendAE.Controllers
         }
 
         // POST: api/Roles
+        [Authorize(Policy = "Admin")]
         [HttpPost]
         public async Task<ActionResult> CrearRol([FromBody] RolDTO dto)
         {
@@ -50,6 +54,7 @@ namespace BackendAE.Controllers
         }
 
         // PUT: api/Roles/5
+        [Authorize(Policy = "Admin")]
         [HttpPut("{id:int}")]
         public async Task<ActionResult> ActualizarRol(int id, [FromBody] RolDTO dto)
         {
@@ -63,6 +68,7 @@ namespace BackendAE.Controllers
         }
 
         // DELETE: api/Roles/5
+        [Authorize(Policy = "Admin")]
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> EliminarRol(int id)
         {
