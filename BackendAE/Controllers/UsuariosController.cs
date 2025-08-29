@@ -3,6 +3,7 @@ using BackendAE.Data;
 using BackendAE.DTOs;
 using BackendAE.Models;
 using BackendAE.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Crypto;
@@ -64,6 +65,7 @@ namespace BackendAE.Controllers
         //    return CreatedAtAction(nameof(GetUsuario), new { id = usuario.UsuarioId }, usuarioDTO);
         //}
         // POST: api/Usuarios
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult> CrearUsuario([FromBody] UsuarioCreacionDTO dto)
         {
