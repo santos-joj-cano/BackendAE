@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace BackendAE.DTOs
 {
@@ -16,8 +17,10 @@ namespace BackendAE.DTOs
         public string? CUI { get; set; }
         public string? Telefono { get; set; }
         public string? Direccion { get; set; }
+        [JsonConverter(typeof(DateTimeJsonConverter))]
         public DateTime? FechaNacimiento { get; set; }
         public string? Genero { get; set; }
+        [JsonConverter(typeof(DateTimeJsonConverter))]
         public DateTime? FechaIngreso { get; set; } = DateTime.Now; // Por defecto, la fecha de ingreso es la fecha actual
     }
 }

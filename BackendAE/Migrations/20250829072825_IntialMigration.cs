@@ -404,24 +404,10 @@ namespace BackendAE.Migrations
                 column: "CatProveedorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Usuarios_CUI",
-                table: "Usuarios",
-                column: "CUI",
-                unique: true,
-                filter: "[CUI] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Usuarios_Email",
                 table: "Usuarios",
                 column: "Email",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Usuarios_NIT",
-                table: "Usuarios",
-                column: "NIT",
-                unique: true,
-                filter: "[NIT] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Usuarios_NombreUsuario",

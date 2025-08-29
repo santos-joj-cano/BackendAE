@@ -63,8 +63,8 @@ namespace BackendAE.Data
             // Asegurar unicidad para las propiedades marcadas como 'Unique' en el documento
             modelBuilder.Entity<Usuario>().HasIndex(u => u.Email).IsUnique();
             modelBuilder.Entity<Usuario>().HasIndex(u => u.NombreUsuario).IsUnique();
-            modelBuilder.Entity<Usuario>().HasIndex(u => u.NIT).IsUnique();
-            modelBuilder.Entity<Usuario>().HasIndex(u => u.CUI).IsUnique();
+            //modelBuilder.Entity<Usuario>().HasIndex(u => u.NIT).IsUnique();
+            //modelBuilder.Entity<Usuario>().HasIndex(u => u.CUI).IsUnique();
             modelBuilder.Entity<Producto>().HasIndex(p => p.SKU).IsUnique();
             modelBuilder.Entity<Venta>().HasIndex(v => v.CodigoVenta).IsUnique();
 

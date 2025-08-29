@@ -463,16 +463,8 @@ namespace BackendAE.Migrations
 
                     b.HasKey("UsuarioId");
 
-                    b.HasIndex("CUI")
-                        .IsUnique()
-                        .HasFilter("[CUI] IS NOT NULL");
-
                     b.HasIndex("Email")
                         .IsUnique();
-
-                    b.HasIndex("NIT")
-                        .IsUnique()
-                        .HasFilter("[NIT] IS NOT NULL");
 
                     b.HasIndex("NombreUsuario")
                         .IsUnique();

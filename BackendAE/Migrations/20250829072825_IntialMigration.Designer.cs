@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackendAE.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250829060827_IntialMigration")]
+    [Migration("20250829072825_IntialMigration")]
     partial class IntialMigration
     {
         /// <inheritdoc />
@@ -466,16 +466,8 @@ namespace BackendAE.Migrations
 
                     b.HasKey("UsuarioId");
 
-                    b.HasIndex("CUI")
-                        .IsUnique()
-                        .HasFilter("[CUI] IS NOT NULL");
-
                     b.HasIndex("Email")
                         .IsUnique();
-
-                    b.HasIndex("NIT")
-                        .IsUnique()
-                        .HasFilter("[NIT] IS NOT NULL");
 
                     b.HasIndex("NombreUsuario")
                         .IsUnique();

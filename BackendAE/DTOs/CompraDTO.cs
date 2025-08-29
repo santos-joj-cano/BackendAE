@@ -1,9 +1,11 @@
-﻿namespace BackendAE.DTOs
+﻿using System.Text.Json.Serialization;
+
+namespace BackendAE.DTOs
 {
     public class CompraDTO
     {
         public int CompraId { get; set; }
-
+        [JsonConverter(typeof(DateTimeJsonConverter))]
         public DateTime FechaCompra { get; set; }
 
         public decimal Total { get; set; }
