@@ -22,7 +22,7 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/MovimientoCajas
-        [Authorize(Policy = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MovimientoCajaDTO>>> GetMovimientoCajas()
         {
@@ -35,7 +35,7 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/MovimientoCajas/5
-        [Authorize(Policy = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id:int}")]
         public async Task<ActionResult<MovimientoCajaDTO>> GetMovimientoCaja(int id)
         {
@@ -50,7 +50,7 @@ namespace BackendAE.Controllers
         }
 
         // POST: api/MovimientoCajas
-        [Authorize(Policy = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult> CrearMovimientoCaja([FromBody] MovimientoCajaCreacionDTO dto)
         {
@@ -79,7 +79,7 @@ namespace BackendAE.Controllers
         }
 
         // DELETE: api/MovimientoCajas/5
-        [Authorize(Policy = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> EliminarMovimientoCaja(int id)
         {

@@ -27,7 +27,7 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/Usuarios
-        [Authorize(Policy = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UsuarioDTO>>> GetUsuarios()
         {
@@ -40,7 +40,7 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/Usuarios/5
-        [Authorize(Policy = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id:int}")]
         public async Task<ActionResult<UsuarioDTO>> GetUsuario(int id)
         {
@@ -68,7 +68,7 @@ namespace BackendAE.Controllers
         //}
         // POST: api/Usuarios
         //[Authorize(Roles = "Admin")]
-        [Authorize(Policy = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult> CrearUsuario([FromBody] UsuarioCreacionDTO dto)
         {
@@ -159,7 +159,7 @@ namespace BackendAE.Controllers
         //    return NoContent();
         //}
 
-        [Authorize(Policy = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id:int}")]
         public async Task<ActionResult> ActualizarUsuario(int id, [FromBody] UsuarioActualizacionDTO dto)
         {
@@ -173,7 +173,7 @@ namespace BackendAE.Controllers
             return NoContent();
         }
 
-        [Authorize(Policy = "Admin,Empleado")]
+       [Authorize(Roles = "Admin,Empleado")]
         [HttpPatch("{id:int}/cambiar-contrasena")]
         public async Task<ActionResult> CambiarContrasena(int id, [FromBody] CambioContrasenaDTO dto)
         {
@@ -193,7 +193,7 @@ namespace BackendAE.Controllers
         }
 
         // DELETE: api/Usuarios/5
-        [Authorize(Policy = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> EliminarUsuario(int id)
         {

@@ -22,7 +22,7 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/Ventas
-        [Authorize(Policy = "Admin,Empleado")]
+       [Authorize(Roles = "Admin,Empleado")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<VentaDTO>>> GetVentas()
         {
@@ -37,7 +37,7 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/Ventas/5
-        [Authorize(Policy = "Admin,Empleado")]
+       [Authorize(Roles = "Admin,Empleado")]
         [HttpGet("{id:int}")]
         public async Task<ActionResult<VentaDTO>> GetVenta(int id)
         {
@@ -54,7 +54,7 @@ namespace BackendAE.Controllers
         }
 
         // POST: api/Ventas
-        [Authorize(Policy = "Admin,Empleado")]
+       [Authorize(Roles = "Admin,Empleado")]
         [HttpPost]
         public async Task<ActionResult> CrearVenta([FromBody] VentaCreacionDTO dto)
         {
@@ -72,7 +72,7 @@ namespace BackendAE.Controllers
         }
 
         // PUT: api/Ventas/5
-        [Authorize(Policy = "Admin,Empleado")]
+       [Authorize(Roles = "Admin,Empleado")]
         [HttpPut("{id:int}")]
         public async Task<ActionResult> ActualizarVenta(int id, [FromBody] VentaDTO dto)
         {
@@ -88,7 +88,7 @@ namespace BackendAE.Controllers
         }
 
         // DELETE: api/Ventas/5
-        [Authorize(Policy = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> EliminarVenta(int id)
         {

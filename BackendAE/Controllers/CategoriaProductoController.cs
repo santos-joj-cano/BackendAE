@@ -22,7 +22,7 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/CategoriaProducto
-        [Authorize(Policy = "Admin,Empleado")]
+       [Authorize(Roles = "Admin,Empleado")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CategoriaProductoDTO>>> GetCategorias()
         {
@@ -31,7 +31,7 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/CategoriaProducto/5
-        [Authorize(Policy = "Admin,Empleado")]
+       [Authorize(Roles = "Admin,Empleado")]
         [HttpGet("{id:int}")]
         public async Task<ActionResult<CategoriaProductoDTO>> GetCategoria(int id)
         {
@@ -42,7 +42,7 @@ namespace BackendAE.Controllers
         }
 
         // POST: api/CategoriaProducto
-        [Authorize(Policy = "Admin,Empleado")]
+       [Authorize(Roles = "Admin,Empleado")]
         [HttpPost]
         public async Task<ActionResult> CrearCategoria([FromBody] CategoriaProductoCreacionDTO dto)
         {
@@ -56,7 +56,7 @@ namespace BackendAE.Controllers
         }
 
         // PUT: api/CategoriaProducto/5
-        [Authorize(Policy = "Admin,Empleado")]
+       [Authorize(Roles = "Admin,Empleado")]
         [HttpPut("{id:int}")]
         public async Task<ActionResult> ActualizarCategoria(int id, [FromBody] CategoriaProductoCreacionDTO dto)
         {
@@ -70,7 +70,7 @@ namespace BackendAE.Controllers
         }
 
         // DELETE: api/CategoriaProducto/5
-        [Authorize(Policy = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> EliminarCategoria(int id)
         {

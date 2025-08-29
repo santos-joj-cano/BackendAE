@@ -22,7 +22,9 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/DetalleCompras
-        [Authorize(Policy = "Admin,Empleado")]
+        //[Authorize(Roles = "Admin")]
+        //[Authorize(Policy = "Empleado")]
+        [Authorize(Roles = "Admin,Empleado")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DetalleCompraDTO>>> GetDetalleCompras()
         {
@@ -35,7 +37,7 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/DetalleCompras/5
-        [Authorize(Policy = "Admin,Empleado")]
+       [Authorize(Roles = "Admin,Empleado")]
         [HttpGet("{id:int}")]
         public async Task<ActionResult<DetalleCompraDTO>> GetDetalleCompra(int id)
         {
@@ -78,7 +80,7 @@ namespace BackendAE.Controllers
         //}
 
         // DELETE: api/DetalleCompras/5
-        [Authorize(Policy = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> EliminarDetalleCompra(int id)
         {

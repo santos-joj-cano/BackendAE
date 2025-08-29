@@ -22,7 +22,7 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/Proveedores
-        [Authorize(Policy = "Admin,Empleado")]
+       [Authorize(Roles = "Admin,Empleado")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProveedorDTO>>> GetProveedores()
         {
@@ -35,7 +35,7 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/Proveedores/5
-        [Authorize(Policy = "Admin,Empleado")]
+       [Authorize(Roles = "Admin,Empleado")]
         [HttpGet("{id:int}")]
         public async Task<ActionResult<ProveedorDTO>> GetProveedor(int id)
         {
@@ -49,7 +49,7 @@ namespace BackendAE.Controllers
         }
 
         // POST: api/Proveedores
-        [Authorize(Policy = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult> CrearProveedor([FromBody] ProveedorCreacionDTO dto)
         {
@@ -62,7 +62,7 @@ namespace BackendAE.Controllers
         }
 
         // PUT: api/Proveedores/5
-        [Authorize(Policy = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id:int}")]
         public async Task<ActionResult> ActualizarProveedor(int id, [FromBody] ProveedorCreacionDTO dto)
         {
@@ -76,7 +76,7 @@ namespace BackendAE.Controllers
         }
 
         // DELETE: api/Proveedores/5
-        [Authorize(Policy = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> EliminarProveedor(int id)
         {

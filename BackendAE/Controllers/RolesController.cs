@@ -22,7 +22,7 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/Roles
-        [Authorize(Policy = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RolDTO>>> GetRoles()
         {
@@ -31,7 +31,7 @@ namespace BackendAE.Controllers
         }
 
         // GET: api/Roles/5
-        [Authorize(Policy = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id:int}")]
         public async Task<ActionResult<RolDTO>> GetRol(int id)
         {
@@ -41,7 +41,7 @@ namespace BackendAE.Controllers
         }
 
         // POST: api/Roles
-        [Authorize(Policy = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult> CrearRol([FromBody] RolDTO dto)
         {
@@ -54,7 +54,7 @@ namespace BackendAE.Controllers
         }
 
         // PUT: api/Roles/5
-        [Authorize(Policy = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id:int}")]
         public async Task<ActionResult> ActualizarRol(int id, [FromBody] RolDTO dto)
         {
@@ -68,7 +68,7 @@ namespace BackendAE.Controllers
         }
 
         // DELETE: api/Roles/5
-        [Authorize(Policy = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> EliminarRol(int id)
         {
