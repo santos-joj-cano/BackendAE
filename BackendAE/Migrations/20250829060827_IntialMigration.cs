@@ -191,8 +191,7 @@ namespace BackendAE.Migrations
                     Observacion = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     CajaId = table.Column<int>(type: "int", nullable: false),
                     UsuarioAperturaId = table.Column<int>(type: "int", nullable: false),
-                    UsuarioCierreId = table.Column<int>(type: "int", nullable: true),
-                    UsuarioId = table.Column<int>(type: "int", nullable: true)
+                    UsuarioCierreId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -215,11 +214,6 @@ namespace BackendAE.Migrations
                         principalTable: "Usuarios",
                         principalColumn: "UsuarioId",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_CajaSesiones_Usuarios_UsuarioId",
-                        column: x => x.UsuarioId,
-                        principalTable: "Usuarios",
-                        principalColumn: "UsuarioId");
                 });
 
             migrationBuilder.CreateTable(
@@ -356,11 +350,6 @@ namespace BackendAE.Migrations
                 name: "IX_CajaSesiones_UsuarioCierreId",
                 table: "CajaSesiones",
                 column: "UsuarioCierreId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CajaSesiones_UsuarioId",
-                table: "CajaSesiones",
-                column: "UsuarioId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Compras_ProveedorId",

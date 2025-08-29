@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackendAE.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250828064342_IntialMigration")]
+    [Migration("20250829060827_IntialMigration")]
     partial class IntialMigration
     {
         /// <inheritdoc />
@@ -88,9 +88,6 @@ namespace BackendAE.Migrations
                     b.Property<int?>("UsuarioCierreId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UsuarioId")
-                        .HasColumnType("int");
-
                     b.HasKey("CajaSesionId");
 
                     b.HasIndex("CajaId");
@@ -98,8 +95,6 @@ namespace BackendAE.Migrations
                     b.HasIndex("UsuarioAperturaId");
 
                     b.HasIndex("UsuarioCierreId");
-
-                    b.HasIndex("UsuarioId");
 
                     b.ToTable("CajaSesiones");
                 });
@@ -557,10 +552,6 @@ namespace BackendAE.Migrations
                         .HasForeignKey("UsuarioCierreId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("BackendAE.Models.Usuario", null)
-                        .WithMany("CajaSesiones")
-                        .HasForeignKey("UsuarioId");
-
                     b.Navigation("Caja");
 
                     b.Navigation("UsuarioApertura");
@@ -733,8 +724,6 @@ namespace BackendAE.Migrations
 
             modelBuilder.Entity("BackendAE.Models.Usuario", b =>
                 {
-                    b.Navigation("CajaSesiones");
-
                     b.Navigation("MovimientosCaja");
 
                     b.Navigation("SesionesAbiertas");

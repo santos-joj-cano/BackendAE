@@ -71,6 +71,6 @@ namespace BackendAE.Models
         public ICollection<CajaSesion>? SesionesCerradas { get; set; }
         public ICollection<MovimientoCaja>? MovimientosCaja { get; set; }
         public ICollection<Venta>? Ventas { get; set; }
-        public ICollection<CajaSesion>? CajaSesiones { get; set; }
+        
     }
 }
