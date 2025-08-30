@@ -35,6 +35,7 @@ namespace BackendAE.Helpers
             CreateMap<UsuarioCreacionDTO, Usuario>()
                 .ForMember(dest => dest.PasswordHash, opt => opt.Ignore());
 
+            CreateMap<UsuarioActualizacionDTO, Usuario>();
             // Roles
             CreateMap<Rol, RolDTO>();
             CreateMap<RolDTO, Rol>();
