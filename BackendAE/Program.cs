@@ -43,6 +43,17 @@ builder.Services.AddScoped<EmailService>();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 // Configuración de la aplicación
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+// Configurar el servicio de CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularApp",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:4200") // ?? Reemplaza con la URL de tu frontend de Angular
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
 
 // Agregar servicios al contenedor de dependencias.
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -119,6 +130,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseCors("AllowAngularApp");
 
 // >>>>>>>>>>> Middleware de Autenticación y Autorización <<<<<<<<<<<<
 app.UseAuthentication();
