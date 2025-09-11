@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackendAE.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250904164842_IntialMigration")]
-    partial class IntialMigration
+    [Migration("20250909213925_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,12 +33,12 @@ namespace BackendAE.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CajaId"));
 
-                    b.Property<bool>("Activa")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Descripcion")
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
+
+                    b.Property<bool>("Estado")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -61,10 +61,8 @@ namespace BackendAE.Migrations
                     b.Property<int>("CajaId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Estado")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                    b.Property<bool>("Estado")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("FechaApertura")
                         .HasColumnType("datetime2");
