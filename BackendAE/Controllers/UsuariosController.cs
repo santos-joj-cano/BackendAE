@@ -494,6 +494,20 @@ namespace BackendAE.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpPatch("{id:int}/estado")]
+        public async Task<ActionResult> CambiarEstado(int id)
+        {
+            var usuario = await _context.Usuarios.FindAsync(id);
+            if (usuario == null) return NotFound();
+
+            usuario.Estado = !usuario.Estado;          // <-- toggle
+            await _context.SaveChangesAsync();
+
+            return Ok(new { usuario.UsuarioId, usuario.Estado });
+        }
+
+
         // Validar correo:
         // GET: api/Usuarios/check-email?email=test@example.com
         [HttpGet("check-email")]
