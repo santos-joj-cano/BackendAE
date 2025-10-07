@@ -75,7 +75,8 @@ namespace BackendAE.Controllers
         { "@NombreUsuario", admin.NombreUsuario },
         { "@ContrasenaTemporal", contrasenaTemporal }
     };
-            await _emailService.SendEmailAsync(admin.Email, "Bienvenido a nuestro sistema Admin", templatePath, replacements);
+            //await _emailService.SendEmailAsync(admin.Email, "Bienvenido a nuestro sistema Admin", templatePath, replacements);
+             _emailService.SendEmailAsync(admin.Email, "Bienvenido a nuestro sistema Admin", templatePath, replacements);
 
             return Ok(new
             {
