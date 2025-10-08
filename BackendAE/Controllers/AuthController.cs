@@ -48,7 +48,7 @@ namespace BackendAE.Controllers
                 SegundoNombre = "Lilien",
                 PrimerApellido = "Rosales",
                 SegundoApellido = "Tozc",
-                Email = "leidyrosales672@gmail.com",
+                Email = "santosjoj643@gmail.com",
                 NombreUsuario = "admin",
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(contrasenaTemporal),
                 Estado = true,
